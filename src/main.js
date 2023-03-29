@@ -3,4 +3,4 @@ import './style.css';
 
 document.querySelector('.cep-button').addEventListener('click', searchCep);
 
-//Mudança para commit inicial
+// Mudança para commit inicial
