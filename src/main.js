@@ -6,22 +6,22 @@ import './style.css';
 document.querySelector('.cep-button').addEventListener('click', searchCep);
 const products = document.querySelector('.products');
 
-const getData = async () => {
-  const response = await fetchProductsList('computador');
-  const data = await response.json();
-  return data;
-};
+// const getData = async () => {
+//   const response = await fetchProductsList('computador');
+//   const data = await response.json();
+//   return data;
+// };
 
-const productList = async () => {
-  const resolve = await getData();
-  const data = Object.values(resolve);
-  const arrayOfProducts = data[4];
-  return arrayOfProducts;
-};
+// const productList = async () => {
+//   const resolve = await getData();
+//   const data = Object.values(resolve);
+//   const arrayOfProducts = data[4];
+//   return arrayOfProducts;
+// };
 
 const elementCreate = async () => {
-  const arrayOfProducts = await productList();
-  arrayOfProducts.forEach((element) => {
+  const data = await fetchProductsList('computador');
+  data.forEach((element) => {
     const obj = {
       id: element.id,
       title: element.title,
