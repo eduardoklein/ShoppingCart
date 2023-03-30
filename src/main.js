@@ -5,22 +5,21 @@ import './style.css';
 
 document.querySelector('.cep-button').addEventListener('click', searchCep);
 const products = document.querySelector('.products');
+const loading = document.createElement('span');
+console.log(loading);
 
-// const getData = async () => {
-//   const response = await fetchProductsList('computador');
-//   const data = await response.json();
-//   return data;
-// };
+const loadingCreate = () => {
+  loading.className = 'loading';
+  loading.innerHTML = 'carregando...';
+  products.appendChild(loading);
+  console.log(loading);
+};
 
-// const productList = async () => {
-//   const resolve = await getData();
-//   const data = Object.values(resolve);
-//   const arrayOfProducts = data[4];
-//   return arrayOfProducts;
-// };
+const loadingRemove = () => loading.remove();
 
 const elementCreate = async () => {
   const data = await fetchProductsList('computador');
+  loadingRemove();
   data.forEach((element) => {
     const obj = {
       id: element.id,
@@ -34,3 +33,10 @@ const elementCreate = async () => {
 };
 
 window.addEventListener('load', elementCreate);
+
+window.addEventListener('click', loadingCreate);
+
+window.addEventListener('load', () => {
+  loadingCreate();
+  elementCreate();
+});
