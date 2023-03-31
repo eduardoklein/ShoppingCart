@@ -1,4 +1,4 @@
-import { saveCartID } from './helpers/cartFunctions';
+import { saveCartID, getSavedCartIDs } from './helpers/cartFunctions';
 import { searchCep } from './helpers/cepFunctions';
 import { fetchProductsList, fetchProduct } from './helpers/fetchFunctions';
 import { createProductElement, createCartProductElement } from './helpers/shopFunctions';
@@ -13,7 +13,6 @@ const handleAddToCart = async (event) => {
   const productId = event.target.parentNode.childNodes[0].innerText;
   saveCartID(productId);
   const product = await fetchProduct(productId);
-  console.log(product);
   const productObj = {
     id: product.id,
     title: product.title,
@@ -22,6 +21,26 @@ const handleAddToCart = async (event) => {
   };
   cartSection.appendChild(createCartProductElement(productObj));
 };
+
+const getCartLocalStorage = async () => {
+  const arrayOfSavedCartIds = getSavedCartIDs();
+  const promises = arrayOfSavedCartIds.map(async (id) => {
+    const produto = await fetchProduct(id);
+    return produto;
+  });
+  const resolvedPromises = await Promise.all(promises);
+  resolvedPromises.forEach((product) => {
+    const productObj = {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      pictures: product.pictures,
+    };
+    cartSection.appendChild(createCartProductElement(productObj));
+  });
+};
+
+window.addEventListener('load', getCartLocalStorage);
 
 const buttonAddEventListener = () => {
   const buttonAdd = document.querySelectorAll('.product__add');
