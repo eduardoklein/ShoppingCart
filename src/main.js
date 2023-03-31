@@ -1,11 +1,34 @@
+import { saveCartID } from './helpers/cartFunctions';
 import { searchCep } from './helpers/cepFunctions';
-import { fetchProductsList } from './helpers/fetchFunctions';
-import { createProductElement } from './helpers/shopFunctions';
+import { fetchProductsList, fetchProduct } from './helpers/fetchFunctions';
+import { createProductElement, createCartProductElement } from './helpers/shopFunctions';
 import './style.css';
 
 document.querySelector('.cep-button').addEventListener('click', searchCep);
 const products = document.querySelector('.products');
 const loading = document.createElement('span');
+const cartSection = document.querySelector('.cart__products');
+
+const handleAddToCart = async (event) => {
+  const productId = event.target.parentNode.childNodes[0].innerText;
+  saveCartID(productId);
+  const product = await fetchProduct(productId);
+  console.log(product);
+  const productObj = {
+    id: product.id,
+    title: product.title,
+    price: product.price,
+    pictures: product.pictures,
+  };
+  cartSection.appendChild(createCartProductElement(productObj));
+};
+
+const buttonAddEventListener = () => {
+  const buttonAdd = document.querySelectorAll('.product__add');
+  buttonAdd.forEach((button) => {
+    button.addEventListener('click', handleAddToCart);
+  });
+};
 
 const loadingCreate = () => {
   loading.className = 'loading';
@@ -29,6 +52,7 @@ const elementCreate = async () => {
       const section = createProductElement(obj);
       products.appendChild(section);
     });
+    buttonAddEventListener();
   } catch (error) {
     loadingRemove();
     const errorElement = document.createElement('span');
